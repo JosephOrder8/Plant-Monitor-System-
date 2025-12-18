@@ -1,11 +1,17 @@
 #include <Arduino.h>
+#include "LightSensor.h"
+
+LightSensor lightsensor;
 
 void setup() 
 {
-  // put your setup code here, to run once:
+  Serial.begin(9600);
+  lightsensor.begin();
 }
 
 void loop() 
 {
-  // put your main code here, to run repeatedly:
+  float light = lightsensor.read();
+  lightsensor.status(light);
+  delay(1000);
 }
