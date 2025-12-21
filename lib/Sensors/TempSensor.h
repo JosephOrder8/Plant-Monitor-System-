@@ -6,9 +6,11 @@
 
 class TempSensor 
 {
-public:
-    void begin(int pin); 
-    int read(); 
+    public:
+    void begin(); 
+    float readhumidity();
+    float readtemp();
+    void status(float humd, float temp);
 private:
 int sensorPin; 
 };

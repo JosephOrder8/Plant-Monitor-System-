@@ -1,17 +1,26 @@
-#include <Arduino.h>
+#include <Arduino.h>  // Default Arduino library
 #include "LightSensor.h"
+#include "TempSensor.h"
 
+// Create instances of the sensor classes
 LightSensor lightsensor;
+TempSensor tempsensor;
 
 void setup() 
 {
   Serial.begin(9600);
-  lightsensor.begin();
+  //lightsensor.begin();
+  tempsensor.begin();
 }
 
 void loop() 
 {
-  float light = lightsensor.read();
-  lightsensor.status(light);
-  delay(1000);
+  // Light sensor
+  //float light = lightsensor.read();
+  //lightsensor.status(light);
+
+  // Tempterature and humidity 
+  float temp = tempsensor.readtemp();
+  float hum = tempsensor.readhumidity();
+  tempsensor.status(hum, temp);
 }

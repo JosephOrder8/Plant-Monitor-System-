@@ -1,5 +1,5 @@
 #include "LightSensor.h"
-#include "pin.h"
+#include <pin_config.h>
 
 void LightSensor::begin() 
 {
@@ -13,24 +13,25 @@ int LightSensor::read()
 
 void LightSensor::status(int value)
 {
-  if (value >= 0 && value <= 50) 
+  if (value >= 30 && value <= 50) 
   {
-    Serial.println("Dark:"+String(value));
+    Serial.print("Dark:");
   } 
   else if (value > 50 && value <= 500) 
   {
-    Serial.println("Dim:"+String(value));
+    Serial.print("Dim:");
   } 
   else if (value > 500 && value <= 800) 
   {
-    Serial.println("Light:"+String(value));
+    Serial.print("Light:");
   } 
   else if (value > 800 && value <= 1023) 
   {
-    Serial.println("Bright:"+String(value));
+    Serial.print("Bright:");
   } 
   else 
   {
-    Serial.println("something went wrong");
+    Serial.print("Something went wrong value is out of range: ");
   }
+  Serial.println(String(value));
 }
