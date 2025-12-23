@@ -7,7 +7,7 @@
 namespace ArduinoPins 
 {
     // Sensors
-    constexpr int SOIL_MOISTURE_PIN = A1;
+    constexpr int SOIL_MOISTURE_PIN = A0;
     constexpr int LIGHT_SENSOR_PIN  = A5;
     constexpr int TEMP_SENSOR_PIN   = 8;
 
