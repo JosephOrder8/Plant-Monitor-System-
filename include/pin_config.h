@@ -8,14 +8,17 @@ namespace ArduinoPins
 {
     // Sensors
     constexpr int SOIL_MOISTURE_PIN = A0;
-    constexpr int LIGHT_SENSOR_PIN  = A5;
+    constexpr int LIGHT_SENSOR_PIN  = A1;
     constexpr int TEMP_SENSOR_PIN   = 8;
 
-    // Actuators
-    // constexpr int WATER_PUMP    = 3;
-    // constexpr int FAN           = 5;
+    // Irrigation System
+    // constexpr int WATER_PUMP_PIN    = 3;
+    // constexpr int TANK_LEVEL_PIN    = 5;
 
-    // Communication
-    //constexpr int I2C_SDA       = A4;
-    //constexpr int I2C_SCL       = A5;
+    // Menu Display
+    constexpr int I2C_SDA_PIN       = A4;
+    constexpr int I2C_SCL_PIN       = A5;
+    constexpr uint8_t ENC_CLK_PIN   = 2;
+    constexpr uint8_t ENC_DT_PIN    = 3;
+    constexpr uint8_t ENC_SW_PIN    = 4;
 }

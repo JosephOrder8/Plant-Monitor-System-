@@ -3,12 +3,16 @@
 #include "TempSensor.h"
 #include "MoistureSensor.h"
 #include "SerialDisplay.h"
+#include "PlantData.h"
+#include "Menu.h"
 
 // Create instances of the sensor classes
 LightSensor lightsensor;
 TempSensor tempsensor;
 MoistureSensor moisturesensor;
 SerialDisplay display;
+PlantData plantData;
+Menu menu;
 
 void setup() 
 {
@@ -17,21 +21,50 @@ void setup()
   lightsensor.begin();
   tempsensor.begin();
   moisturesensor.begin();
+
+  display.showHeader();
+  menu.begin();
 }
 
 void loop() 
 {
-  // Light sensor
-  float light = lightsensor.read();
-  //lightsensor.status(light);
+  // Read sensors
+  float light = lightsensor.read();       // Light 
+  float temp = tempsensor.readtemp();     // Tempterature 
+  float hum = tempsensor.readhumidity();  // Humidity 
+  float moisture = moisturesensor.read(); // Moisture 
+  
+  // Update plant data
+  plantData.lightLevel = light;
+  plantData.soilMoisture = moisture;
+  plantData.temperature = temp;
+  plantData.humidity = hum;
 
-  // Tempterature and humidity 
-  float temp = tempsensor.readtemp();
-  float hum = tempsensor.readhumidity();
-  //tempsensor.status(hum, temp);
+  // Show data on serial display
+  display.showSerialData(plantData);
+  menu.update();
+}
 
-  // Moisture sensor
-  float moisture = moisturesensor.read();
-  // moisturesensor.status(moisture);
-  display.printSerialData(light, moisture, temp, hum);
+void LCDmenu()
+{
+  menu.update();
+
+    switch (menu.getState()) 
+    {
+        case MenuState::LIVE_DATA:
+            // display sensors
+            break;
+
+        case MenuState::WATER_STATUS:
+            // pump / valve info
+            break;
+
+        case MenuState::SETTINGS:
+            // configuration menu
+            break;
+
+        default:
+            break;
+    }
+
 }
