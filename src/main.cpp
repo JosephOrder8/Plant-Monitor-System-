@@ -1,70 +1,48 @@
 #include <Arduino.h>  // Default Arduino library
-#include "LightSensor.h"
-#include "TempSensor.h"
-#include "MoistureSensor.h"
-#include "SerialDisplay.h"
-#include "PlantData.h"
+#include "Encoder.h"
+#include "ScreenManager.h"
+#include "SensorManager.h"
+#include "SensorScreen.h"
 #include "Menu.h"
+#include "MenuScreen.h"
+#include "Display.h"
 
-// Create instances of the sensor classes
-LightSensor lightsensor;
-TempSensor tempsensor;
-MoistureSensor moisturesensor;
-SerialDisplay display;
-PlantData plantData;
+// Global objects
+Encoder encoder;
+ScreenManager screenManager;
+SensorManager sensorManager;
+Display display;
+
+// Screens
+SensorScreen sensorScreen(sensorManager);
 Menu menu;
+MenuScreen menuScreen(menu, screenManager, display);
 
 void setup() 
 {
   Serial.begin(9600);
-  
-  lightsensor.begin();
-  tempsensor.begin();
-  moisturesensor.begin();
+   encoder.begin();
+   
+   screenManager.registerScreen(ScreenID::SENSORS, &sensorScreen);
+   screenManager.set(ScreenID::SENSORS);
 
-  display.showHeader();
-  menu.begin();
+   screenManager.registerScreen(ScreenID::MENU, &menuScreen);
+   screenManager.set(ScreenID::MENU);
 }
 
 void loop() 
 {
-  // Read sensors
-  float light = lightsensor.read();       // Light 
-  float temp = tempsensor.readtemp();     // Tempterature 
-  float hum = tempsensor.readhumidity();  // Humidity 
-  float moisture = moisturesensor.read(); // Moisture 
+  // 1. Update encoder
+    encoder.update();
   
-  // Update plant data
-  plantData.lightLevel = light;
-  plantData.soilMoisture = moisture;
-  plantData.temperature = temp;
-  plantData.humidity = hum;
+  // 2. Get encoder event
+  EncoderEvent e = encoder.getEvent();
+  if (e != EncoderEvent::NONE) 
+  {
+    screenManager.handleEncoder(e);
+  }
 
-  // Show data on serial display
-  display.showSerialData(plantData);
-  menu.update();
-}
-
-void LCDmenu()
-{
-  menu.update();
-
-    switch (menu.getState()) 
-    {
-        case MenuState::LIVE_DATA:
-            // display sensors
-            break;
-
-        case MenuState::WATER_STATUS:
-            // pump / valve info
-            break;
-
-        case MenuState::SETTINGS:
-            // configuration menu
-            break;
-
-        default:
-            break;
-    }
-
+  // 3. Update active screen
+  screenManager.update();
+  delay(1000); // demo only
 }

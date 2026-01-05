@@ -1,3 +1,38 @@
+#include "Display.h"
+#include <LiquidCrystal_I2C.h>
+
+static LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void Display::begin() 
+{
+    lcd.begin(16, 2);
+    lcd.clear();
+    //lcd.init();
+    //lcd.backlight();
+}
+
+void Display::clear() 
+{
+    lcd.clear();
+}
+
+void Display::showMenu(const char* label) 
+{
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("> ");
+    lcd.print(label);
+}
+
+void Display::showSensors(int moisture) 
+{
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Moisture:");
+    lcd.setCursor(0, 1);
+    lcd.print(moisture);
+}
+/*
 #include "SerialDisplay.h"
 #include "PlantData.h"
 
@@ -30,3 +65,5 @@ void SerialDisplay::showSerialData(const PlantData& data)
     Serial.println(data.lightLevel,1);  
     delay(2000);
 }
+
+*/
