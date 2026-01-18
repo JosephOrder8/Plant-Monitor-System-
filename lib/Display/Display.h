@@ -11,6 +11,9 @@ public:
     void showSensors(int moisture);
     void showMessage(const char* msg);
 
+    void drawMenuRow(uint8_t row, bool selected, const char* label);
+
 private:
     void setLine(uint8_t row, const char* text);
+    static constexpr uint8_t COLS = 16;
 };

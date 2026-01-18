@@ -8,6 +8,8 @@ void Encoder::begin()
     pinMode(ArduinoPins::ENC_SW_PIN, INPUT_PULLUP);  // Encoder switch pin
 
     lastState = digitalRead(ArduinoPins::ENC_CLK_PIN); // Initial state
+
+    Serial.println("Encoder initialized: " + String(lastState));
 }
 
 void Encoder::update() 
@@ -19,42 +21,41 @@ void Encoder::update()
 void Encoder::readEncoder() 
 {
     int currentState = digitalRead(ArduinoPins::ENC_CLK_PIN);
-    if (currentState != lastState) 
+
+    if (lastState == HIGH && currentState == LOW) 
     {
-        if (digitalRead(ArduinoPins::ENC_DT_PIN) != currentState) 
+        if(millis() - lastMoveTime > 4)
         {
-            event = EncoderEvent::CW; // Clockwise
-        } else {
-            event = EncoderEvent::CCW; // Counter-clockwise
-        }
+            if (digitalRead(ArduinoPins::ENC_DT_PIN) == HIGH ) 
+            {
+                event = EncoderEvent::CCW; 
+                Serial.println("Encoder CCW");
+            } 
+            else 
+            {
+                event = EncoderEvent::CW;
+                Serial.println("Encoder CW");
+            }
+            lastMoveTime = millis();
+        } 
+    
     }
-     lastState = currentState;
+    lastState = currentState;
 }
 
 void Encoder::readButton() 
 {
-    if (!digitalRead(ArduinoPins::ENC_SW_PIN)) 
+    int btnState = digitalRead(ArduinoPins::ENC_SW_PIN);
+
+    if (btnState == LOW) 
     {
-        static unsigned long buttonPressTime = 0;
-        if (buttonPressTime == 0) 
+        if (millis() - lastButtonPress > 50) 
         {
-            buttonPressTime = millis();
-        } 
-        else if (millis() - buttonPressTime > 1000) 
-        {
-            event = EncoderEvent::LONG_CLICK; // Long click
-            buttonPressTime = 0; // Reset
+            event = EncoderEvent::CLICK;             // Click
+            Serial.println("Button Clicked");
         }
+        lastButtonPress = millis(); // Update press time
     } 
-    else 
-    {
-        static unsigned long buttonPressTime = 0;
-        if (buttonPressTime != 0 && millis() - buttonPressTime < 1000) 
-        {
-            event = EncoderEvent::CLICK; // Short click
-        }
-        buttonPressTime = 0; // Reset
-    }
 }
 
 EncoderEvent Encoder::getEvent() 
@@ -63,6 +64,26 @@ EncoderEvent Encoder::getEvent()
     event = EncoderEvent::NONE;
     return e;
 }
+
+/*
+void Encoder::readEncoder() 
+{
+    int currentState = digitalRead(ArduinoPins::ENC_CLK_PIN);
+
+    if (currentState != lastState && currentState == 1) 
+    {
+        if (digitalRead(ArduinoPins::ENC_DT_PIN) != currentState ) 
+        {
+            event = EncoderEvent::CW; 
+        } 
+        else 
+        {
+            event = EncoderEvent::CCW;
+        }
+    }
+    lastState = currentState;
+}
+*/
 
 /*
 void Menu::readEncoder() 

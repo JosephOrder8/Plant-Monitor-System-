@@ -3,14 +3,12 @@
 #include "MoistureSensor.h"
 #include "PlantData.h"
 #include "SensorManager.h"
-#include "SerialDisplay.h"
 
 // Create instances of the sensor classes
 LightSensor lightsensor;
 TempSensor tempsensor;
 MoistureSensor moisturesensor;
 PlantData plantData;
-SerialDisplay display;
 
 void SensorManager::initializeSensors() 
 {
@@ -38,7 +36,5 @@ void SensorManager::readSensors()
 
 void SensorManager::displaySensorData(const PlantData& data) 
 {
-    display.showSerialData(data);
-
-    delay(2000);
+    // Display or log the sensor data
 }

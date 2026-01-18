@@ -1,30 +1,66 @@
 #include "MenuScreen.h"
 #include <Arduino.h>
+#include "ScreenManager.h"
+#include "Menu.h"
+#include "Encoder.h"
 
 MenuScreen::MenuScreen(Menu& m, ScreenManager& sm, Display& d)
     : menu(m), screenManager(sm), display(d) {}
 
 void MenuScreen::enter() 
 {
-    Serial.println("== MENU ==");
+    display.clear();
+    topIndex = 0;
+    Serial.println("Enter Menu Screen");
 }
 
 void MenuScreen::update() 
 {
-    Serial.print("> ");
-    Serial.println(menu.currentLabel());
-    display.showMenu(menu.currentLabel());
+    int selected = menu.selectedIndex();
+
+    // Scroll window if needed
+    if (selected < topIndex) 
+    {
+        topIndex = selected;
+    }
+    else if (selected >= topIndex + ROWS) 
+    {
+        topIndex = selected - ROWS + 1;
+    }
+
+    // Draw visible rows
+    for (int row = 0; row < ROWS; row++) 
+    {
+        int itemIndex = topIndex + row;
+
+        if (itemIndex < menu.size()) 
+        {
+            display.drawMenuRow(row,itemIndex == selected,menu.item(itemIndex).label);
+        }
+    }
+}
+
+void MenuScreen::exit() 
+{
+     Serial.println("Exit MenuScreen");// No special exit actions needed for MenuScreen
 }
 
 void MenuScreen::onEncoder(EncoderEvent e) 
 {
-    if (e == EncoderEvent::CW) {
-        menu.next();
+    if (e == EncoderEvent::CW) 
+    {
+        menu.next();                        // Move to next menu item
+        // Serial.println("Menu next: Clockwise");
     }
-    else if (e == EncoderEvent::CCW) {
-        menu.prev();
+    else if (e == EncoderEvent::CCW) 
+    {
+        menu.prev();                        // Move to previous menu item
+        // Serial.println("Menu previous: Counter-Clockwise");
     }
-    else if (e == EncoderEvent::CLICK) {
-        screenManager.set(menu.selected());
+    else if (e == EncoderEvent::CLICK) 
+    {
+        screenManager.set(menu.selected()); // Switch to selected screen
+        // screenManager.set(menu.item(menu.selectedIndex()).screen);
+        Serial.println("Menu select");
     }
 }

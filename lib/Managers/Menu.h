@@ -2,7 +2,8 @@
 #include <Arduino.h>
 #include "ScreenID.h"
 
-struct MenuItem {
+struct MenuItem 
+{
     const char* label;
     ScreenID screen;
 };
@@ -14,13 +15,13 @@ public:
     void prev();
     ScreenID selected() const;
     const char* currentLabel() const;
+    
+    int selectedIndex() const;
+    const MenuItem& item(int index) const;
+    int size() const;
 
 private:
     int index = 0;
-    static constexpr MenuItem items[] = {
-        {"Sensors", ScreenID::SENSORS},
-        {"Irrigation", ScreenID::IRRIGATION},
-        {"Settings", ScreenID::SETTINGS}
-    };
-    static constexpr int count = 3;
+    static const MenuItem items[];
+    static const int count;
 };

@@ -21,13 +21,15 @@ MenuScreen menuScreen(menu, screenManager, display);
 void setup() 
 {
   Serial.begin(9600);
-   encoder.begin();
-   
-   screenManager.registerScreen(ScreenID::SENSORS, &sensorScreen);
-   screenManager.set(ScreenID::SENSORS);
+  encoder.begin();
+  display.begin();
+  
+  screenManager.registerScreen(ScreenID::MENU, &menuScreen);
+  screenManager.set(ScreenID::MENU);
 
-   screenManager.registerScreen(ScreenID::MENU, &menuScreen);
-   screenManager.set(ScreenID::MENU);
+  // screenManager.registerScreen(ScreenID::LIVE_DATA, &sensorScreen);
+  // screenManager.set(ScreenID::LIVE_DATA);
+  
 }
 
 void loop() 
@@ -44,5 +46,4 @@ void loop()
 
   // 3. Update active screen
   screenManager.update();
-  delay(1000); // demo only
 }

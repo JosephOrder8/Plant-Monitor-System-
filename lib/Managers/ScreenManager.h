@@ -1,11 +1,6 @@
 #pragma once
 #include "Screen.h"
-
-enum class ScreenID 
-{
-    MENU,
-    SENSORS
-};
+#include "ScreenID.h"
 
 class ScreenManager 
 {
@@ -17,6 +12,6 @@ public:
     void registerScreen(ScreenID id, Screen* screen);  // Register a screen with an ID
 
 private:
-    Screen* current = nullptr;      // Pointer to the current screen
-    Screen* screens[2] = {nullptr}; // Array to hold registered screens
+    Screen* current = nullptr;         // Pointer to the current screen
+    Screen* screens[2] = {nullptr};    // Array to hold registered screens
 };

@@ -2,6 +2,7 @@
 #define SENSORMANAGER_H
 
 #include <Arduino.h>
+#include "PlantData.h"
 #pragma once
 
 class SensorManager 

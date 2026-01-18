@@ -3,7 +3,8 @@
 enum class ScreenID 
 {
     MENU,
-    SENSORS,
+    LIVE_DATA,
     IRRIGATION,
+    POWER,
     SETTINGS
 };

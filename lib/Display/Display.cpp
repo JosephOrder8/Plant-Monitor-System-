@@ -5,10 +5,13 @@ static LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void Display::begin() 
 {
-    lcd.begin(16, 2);
-    lcd.clear();
-    //lcd.init();
-    //lcd.backlight();
+    lcd.init();
+    lcd.backlight();
+    lcd.setCursor(0, 0);
+    lcd.print("Plant Monitor");
+    lcd.setCursor(0, 1);
+    lcd.print("System V1.0");
+    delay(3000); // Show welcome message for 3 seconds
 }
 
 void Display::clear() 
@@ -32,38 +35,17 @@ void Display::showSensors(int moisture)
     lcd.setCursor(0, 1);
     lcd.print(moisture);
 }
-/*
-#include "SerialDisplay.h"
-#include "PlantData.h"
 
-void SerialDisplay::printSerialData(float light, int soil, float temp, float humd)
+void Display::drawMenuRow(uint8_t row, bool selected, const char* label) 
 {
-    Serial.println("---- Plant Monitor ----");
-    
-    Serial.print("[LIGHT] " + String(light)+" lux, ");
-    Serial.print("[SOIL] " + String(soil)+" %, ");
-    Serial.print("[TEMP] " + String(temp)+" F, ");
-    Serial.println("[HUM] " + String(humd)+" % ");
+    lcd.setCursor(0, row);
+    lcd.print(selected ? '>' : ' ');
+    lcd.print(label);
 
-    Serial.println("-----------------------");
-
-    delay(3000);
-};
-
-void SerialDisplay::showHeader() const {
-    Serial.println();
-    Serial.println("=== Plant Monitor ===");
-    Serial.println("Soil(%)  Temp(C)  Hum(%)  Light");
-    Serial.println("-------------------------------------");
+    // Clear remaining characters
+    int len = strlen(label);
+    for (int i = len + 1; i < COLS; i++) 
+    {
+        lcd.print(' ');
+    }
 }
-
-void SerialDisplay::showSerialData(const PlantData& data)
-{
-    Serial.print(data.soilMoisture, 1); Serial.print("     ");
-    Serial.print(data.temperature, 1);  Serial.print("     ");
-    Serial.print(data.humidity, 1);     Serial.print("     ");
-    Serial.println(data.lightLevel,1);  
-    delay(2000);
-}
-
-*/
