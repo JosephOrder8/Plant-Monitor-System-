@@ -6,8 +6,7 @@ enum class EncoderEvent
     NONE,
     CW,
     CCW,
-    CLICK,
-    LONG_CLICK
+    PRESS
 };
 
 class Encoder 

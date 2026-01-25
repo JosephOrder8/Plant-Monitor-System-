@@ -43,24 +43,45 @@ void MenuScreen::update()
 void MenuScreen::exit() 
 {
      Serial.println("Exit MenuScreen");// No special exit actions needed for MenuScreen
+     display.clear();
 }
 
 void MenuScreen::onEncoder(EncoderEvent e) 
 {
     if (e == EncoderEvent::CW) 
     {
-        menu.next();                        // Move to next menu item
+        //menu.next();                        // Move to next menu item
         // Serial.println("Menu next: Clockwise");
     }
     else if (e == EncoderEvent::CCW) 
     {
-        menu.prev();                        // Move to previous menu item
+        //menu.prev();                        // Move to previous menu item
         // Serial.println("Menu previous: Counter-Clockwise");
     }
-    else if (e == EncoderEvent::CLICK) 
+    else if (e == EncoderEvent::PRESS) 
     {
-        screenManager.set(menu.selected()); // Switch to selected screen
+        //screenManager.set(menu.selected()); // Switch to selected screen
         // screenManager.set(menu.item(menu.selectedIndex()).screen);
-        Serial.println("Menu select");
+        //Serial.println("Menu select");
     }
+}
+
+void MenuScreen::onEncoderTurn(EncoderEvent e)
+{
+    if (e == EncoderEvent::CW)  
+    {
+        menu.next();
+        Serial.println("Menu next: CW");
+    }
+    if (e == EncoderEvent::CCW) 
+    {
+        menu.prev();
+        Serial.println("Menu previous: CCW");
+    }
+}
+
+void MenuScreen::onEncoderPress()
+{
+    screenManager.set(menu.selected());
+    Serial.println("Menu select");
 }

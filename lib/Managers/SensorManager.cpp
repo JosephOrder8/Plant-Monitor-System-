@@ -10,6 +10,9 @@ TempSensor tempsensor;
 MoistureSensor moisturesensor;
 PlantData plantData;
 
+static unsigned long lastUpdate = 0;
+const unsigned long updateInterval = 500; // ms
+
 void SensorManager::initializeSensors() 
 {
     lightsensor.begin();
@@ -19,22 +22,41 @@ void SensorManager::initializeSensors()
 
 void SensorManager::readSensors() 
 {
-    float light = lightsensor.read();       // Light 
-    float temp = tempsensor.readtemp();     // Tempterature 
-    float hum = tempsensor.readhumidity();  // Humidity 
-    float moisture = moisturesensor.read(); // Moisture 
+    unsigned long now = millis();
+    if (now - lastUpdate < updateInterval)
+    return; // too soon → skip update
+    lastUpdate = now;
 
-    // Update plant data
+    light = lightsensor.read();       // Light 
+    temp = tempsensor.readtemp();     // Tempterature 
+    hum = tempsensor.readhumidity();  // Humidity 
+    moisture = moisturesensor.read(); // Moisture 
+}
+
+float SensorManager::lightIntensity() const 
+{
+    return light;
+}
+
+float SensorManager::temperature() const 
+{
+    return temp;
+}
+
+float SensorManager::humidty() const 
+{
+    return hum;
+}
+
+float SensorManager::soilMoisture() const 
+{
+    return moisture;
+}
+
+void SensorManager::storeSensorData() 
+{
     plantData.lightLevel = light;
     plantData.soilMoisture = moisture;
     plantData.temperature = temp;
     plantData.humidity = hum;
-
-    // For demonstration, return soil moisture as an integer percentage
-    // return static_cast<int>(moisture);
-}
-
-void SensorManager::displaySensorData(const PlantData& data) 
-{
-    // Display or log the sensor data
 }

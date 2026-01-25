@@ -14,9 +14,9 @@ SensorManager sensorManager;
 Display display;
 
 // Screens
-SensorScreen sensorScreen(sensorManager);
 Menu menu;
 MenuScreen menuScreen(menu, screenManager, display);
+SensorScreen sensorScreen(sensorManager, display, screenManager);
 
 void setup() 
 {
@@ -27,23 +27,29 @@ void setup()
   screenManager.registerScreen(ScreenID::MENU, &menuScreen);
   screenManager.set(ScreenID::MENU);
 
-  // screenManager.registerScreen(ScreenID::LIVE_DATA, &sensorScreen);
-  // screenManager.set(ScreenID::LIVE_DATA);
+  screenManager.registerScreen(ScreenID::LIVE_DATA, &sensorScreen);
   
 }
 
 void loop() 
 {
   // 1. Update encoder
-    encoder.update();
+    // encoder.update();
   
   // 2. Get encoder event
   EncoderEvent e = encoder.getEvent();
   if (e != EncoderEvent::NONE) 
   {
-    screenManager.handleEncoder(e);
+    // screenManager.handleEncoder(e);
+    if (e == EncoderEvent::PRESS)
+    {
+      screenManager.onEncoderPress();
+    }
+    else
+    {
+      screenManager.onEncoderTurn(e);
+    }
   }
-
   // 3. Update active screen
   screenManager.update();
 }

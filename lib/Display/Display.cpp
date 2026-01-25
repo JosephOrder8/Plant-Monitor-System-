@@ -49,3 +49,41 @@ void Display::drawMenuRow(uint8_t row, bool selected, const char* label)
         lcd.print(' ');
     }
 }
+
+void Display::showSensorRow(int lcdRow, bool selected, int index, SensorManager& sensors) 
+{
+    lcd.setCursor(0, lcdRow);
+
+    lcd.print(selected ? ">" : " ");
+
+    switch (index) 
+    {
+        case 0:
+            lcd.print("Soil:");
+            lcd.print(sensors.soilMoisture());
+            lcd.print(" %");
+            break;
+
+        case 1:
+            lcd.print("Temp:");
+            lcd.print(sensors.temperature());
+            lcd.print(" C");
+            break;
+
+        case 2:
+            lcd.print("Hum:");
+            lcd.print(sensors.humidty());
+            lcd.print(" %");
+            break;
+
+        case 3:
+            lcd.print("Light:");
+            lcd.print(sensors.lightIntensity());
+            lcd.print(" lx");
+            break;
+
+        case 4:
+            lcd.print("Return to Menu");
+            break;
+    }
+}

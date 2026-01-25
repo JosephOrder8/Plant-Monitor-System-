@@ -3,19 +3,20 @@
 
 void Encoder::begin() 
 {
-    pinMode(ArduinoPins::ENC_CLK_PIN, INPUT_PULLUP); // Encoder clock pin
-    pinMode(ArduinoPins::ENC_DT_PIN, INPUT_PULLUP);  // Encoder data pin
+    pinMode(ArduinoPins::ENC_CLK_PIN, INPUT);        // Encoder clock pin
+    pinMode(ArduinoPins::ENC_DT_PIN, INPUT);         // Encoder data pin
     pinMode(ArduinoPins::ENC_SW_PIN, INPUT_PULLUP);  // Encoder switch pin
 
     lastState = digitalRead(ArduinoPins::ENC_CLK_PIN); // Initial state
 
-    Serial.println("Encoder initialized: " + String(lastState));
+    // Serial.println("CLK Pin: " + String(digitalRead(ArduinoPins::ENC_CLK_PIN)));
+    // Serial.println("SW Pin: " + String(digitalRead(ArduinoPins::ENC_SW_PIN)));
 }
 
 void Encoder::update() 
 {
-    readEncoder();
-    readButton();
+    // readEncoder();
+    // readButton();
 }
 
 void Encoder::readEncoder() 
@@ -51,7 +52,7 @@ void Encoder::readButton()
     {
         if (millis() - lastButtonPress > 50) 
         {
-            event = EncoderEvent::CLICK;             // Click
+            event = EncoderEvent::PRESS;             // Click
             Serial.println("Button Clicked");
         }
         lastButtonPress = millis(); // Update press time
@@ -60,61 +61,85 @@ void Encoder::readButton()
 
 EncoderEvent Encoder::getEvent() 
 {
-    EncoderEvent e = event;
-    event = EncoderEvent::NONE;
-    return e;
-}
+    // if (millis() < 300) return EncoderEvent::NONE; // startup guard
+    
+    static bool initialized = false;
+    static bool clkInitialized = false;
 
-/*
-void Encoder::readEncoder() 
-{
-    int currentState = digitalRead(ArduinoPins::ENC_CLK_PIN);
+    static int lastCLK;
+    static bool lastBtn;
+    static unsigned long lastBtnTime = 0;
 
-    if (currentState != lastState && currentState == 1) 
+    const unsigned long debounceMs = 40;
+
+// ======================
+// Rotation detection
+// ======================
+    int clk = digitalRead(ArduinoPins::ENC_CLK_PIN);
+    
+    if (!clkInitialized) 
     {
-        if (digitalRead(ArduinoPins::ENC_DT_PIN) != currentState ) 
-        {
-            event = EncoderEvent::CW; 
-        } 
-        else 
-        {
-            event = EncoderEvent::CCW;
-        }
-    }
-    lastState = currentState;
-}
-*/
-
-/*
-void Menu::readEncoder() 
-{
-int clkState = digitalRead(ArduinoPins::ENC_CLK_PIN);
-
-     if (clkState != lastClkState) 
-     {
-        if (digitalRead(ArduinoPins::ENC_DT_PIN) != clkState) 
-        {
-            cursor++;
-        } else {
-            cursor--;
-        }
-        cursor = constrain(cursor, 0, 6); // Assuming 7 menu items (0-6)
-        Serial.println("Rotate: "+ String(cursor));
-        updateMenu();
+        lastCLK = clk;
+        clkInitialized = true;
     }
 
-    lastClkState = clkState;
-}
 
-void Menu::readButton() 
-{
-    if (!digitalRead(ArduinoPins::ENC_SW_PIN)) 
+    if (clk != lastCLK)
     {
-        if (millis() - lastButtonPress > 300) {
-            currentState = static_cast<MenuState>(cursor + 1);
-            lastButtonPress = millis();
+        lastCLK = clk;
+        if (clk == LOW)
+        {
+            if (digitalRead(ArduinoPins::ENC_DT_PIN) == HIGH)
+            {
+                Serial.println("Encoder: CW");
+                return EncoderEvent::CW;
+            }
+            else
+            {
+                Serial.println("Encoder: CCW");
+                return EncoderEvent::CCW;
+            }
         }
     }
+
+
+
+// ======================
+// Button detection
+// ======================
+bool btn = digitalRead(ArduinoPins::ENC_SW_PIN);
+
+if (!initialized)
+{
+    lastBtn = btn;
+    lastBtnTime = millis();
+    initialized = true;
+    return EncoderEvent::NONE;
 }
 
+if (btn != lastBtn)
+{
+    lastBtnTime = millis();
+}
+
+    if (lastBtn == HIGH && btn == LOW)
+    {
+        lastBtn = btn;
+        Serial.println("Encoder: Btn PRESS");
+        return EncoderEvent::PRESS;
+    }
+/*
+    if ((millis() - lastBtnTime) > debounceMs)
+    {
+        if (lastBtn == HIGH && btn == LOW)
+        {
+            lastBtn = btn;
+            Serial.println("Button PRESS");
+            return EncoderEvent::PRESS;
+        }
+    }
 */
+lastBtn = btn;
+return EncoderEvent::NONE;
+}
+

@@ -10,6 +10,9 @@ public:
     void handleEncoder(EncoderEvent e); // Handle encoder events
 
     void registerScreen(ScreenID id, Screen* screen);  // Register a screen with an ID
+    void onEncoderTurn(EncoderEvent e);
+    void onEncoderPress();
+    // void onEncoderTurn(int dir);        // Handle encoder turn events
 
 private:
     Screen* current = nullptr;         // Pointer to the current screen

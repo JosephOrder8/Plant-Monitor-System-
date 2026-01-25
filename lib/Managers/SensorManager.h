@@ -10,8 +10,16 @@ class SensorManager
 public:
     void initializeSensors(); 
     void readSensors();
-    void displaySensorData(const PlantData& data);
+    void storeSensorData();
+    float lightIntensity() const;  
+    float temperature() const; 
+    float humidty() const; 
+    float soilMoisture() const;
 private:
-int sensorPin; 
+
+    float light;       // Light 
+    float temp;        // Tempterature 
+    float hum;         // Humidity 
+    float moisture;    // Moisture 
 };
 #endif // SENSORMANAGER_H
