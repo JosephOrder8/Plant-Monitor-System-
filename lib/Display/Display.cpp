@@ -11,6 +11,7 @@ void Display::begin()
     lcd.print("Plant Monitor");
     lcd.setCursor(0, 1);
     lcd.print("System V1.0");
+    Serial.println("Plant Monitor System V1.0");
     delay(3000); // Show welcome message for 3 seconds
 }
 

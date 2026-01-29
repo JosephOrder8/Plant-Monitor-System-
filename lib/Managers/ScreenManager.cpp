@@ -21,14 +21,6 @@ void ScreenManager::update() // Update the current screen
     if (current) current->update();
 }
 
-void ScreenManager::handleEncoder(EncoderEvent e) // Handle encoder events
-{
-    if (current) 
-    {
-        current->onEncoder(e);
-    }
-}
-
 void ScreenManager::onEncoderTurn(EncoderEvent e)
 {
     if (current)

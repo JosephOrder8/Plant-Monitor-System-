@@ -12,7 +12,6 @@ public:
 
     void enter() override;
     void update() override;
-    void onEncoder(EncoderEvent e) override;
     void onEncoderPress() override;
     void onEncoderTurn(EncoderEvent e) override;
     void exit() override;

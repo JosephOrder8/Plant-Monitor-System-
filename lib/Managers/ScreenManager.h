@@ -5,14 +5,12 @@
 class ScreenManager 
 {
 public:
-    void set(ScreenID id);              // Switch to a specific screen                          
-    void update();                      // Update the current screen
-    void handleEncoder(EncoderEvent e); // Handle encoder events
-
+    void set(ScreenID id);                             // Switch to a specific screen                          
+    void update();                                     // Update the current screen
     void registerScreen(ScreenID id, Screen* screen);  // Register a screen with an ID
-    void onEncoderTurn(EncoderEvent e);
-    void onEncoderPress();
-    // void onEncoderTurn(int dir);        // Handle encoder turn events
+    void onEncoderTurn(EncoderEvent e);                // Handle encoder turn events
+    void onEncoderPress();                             // Handle encoder press events
+    // void onEncoderTurn(int dir);                    // Handle encoder turn events
 
 private:
     Screen* current = nullptr;         // Pointer to the current screen

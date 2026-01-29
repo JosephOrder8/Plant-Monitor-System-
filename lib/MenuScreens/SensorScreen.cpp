@@ -34,43 +34,39 @@ void SensorScreen::update() // Called periodically to update the sensor screen
 
 }
 
-void renderSensorData() // Render sensor data on the display
+void SensorScreen::exit() 
 {
-    
+    Serial.println("Exit SensorScreen");
+    cursor = 0;
+    display.clear();
 }
 
 void SensorScreen::onEncoderTurn(int dir) // Handle encoder turn events
 {
     cursor += dir;
-
-    if (cursor < 0) cursor = 0;                      // Clamp to min
-    if (cursor >= ROW_COUNT) cursor = ROW_COUNT - 1; // Clamp to max
-
-    // Scroll window
-    if (cursor < offset) offset = cursor;            // Scroll up
-    if (cursor >= offset + 2) offset = cursor - 1;   // Scroll down
-    Serial.print("Cursor: ");
-    Serial.print(cursor);
-}
-
-void SensorScreen::onEncoder(EncoderEvent e) // Handle encoder events
-{
-    if (e == EncoderEvent::CW) 
+    
+    // Clamp to min and max
+    if (cursor < 0)                       
     {
-        // menu.next();                        // Move to next menu item
-        // Serial.println("Menu next: Clockwise");
+        cursor = 0;   // Clamp to min
     }
-    else if (e == EncoderEvent::CCW) 
+
+    if (cursor >= ROW_COUNT)              
     {
-        // menu.prev();                        // Move to previous menu item
-        // Serial.println("Menu previous: Counter-Clockwise");
+        cursor = ROW_COUNT - 1;  // Clamp to max
     }
-    else if (e == EncoderEvent::PRESS) 
+    // Scroll window: Scroll up or down as needed
+    if (cursor < offset)            
     {
-        // screenManager.set(menu.selected()); // Switch to selected screen
-        // screenManager.set(menu.item(menu.selectedIndex()).screen);
-        // Serial.println("Menu select");
+        offset = cursor;  //Scroll up
     }
+
+    if (cursor >= offset + 2) 
+    {
+        offset = cursor - 1;   // Scroll down
+    }    
+    
+    Serial.println("Cursor: "+ String(cursor));
 }
 
 void SensorScreen::onEncoderPress() 
@@ -91,16 +87,9 @@ void SensorScreen::onEncoderTurn(EncoderEvent e)
     {
         onEncoderTurn(1);
     }
-    
-    if (e == EncoderEvent::CCW) 
+    else if (e == EncoderEvent::CCW) 
     {
         onEncoderTurn(-1);
     }
 }
 
-void SensorScreen::exit() 
-{
-    Serial.println("Exit SensorScreen");
-    cursor = 0;
-    display.clear();
-}

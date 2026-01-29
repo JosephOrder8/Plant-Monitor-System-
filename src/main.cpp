@@ -33,14 +33,11 @@ void setup()
 
 void loop() 
 {
-  // 1. Update encoder
-    // encoder.update();
+  // 1. Get encoder event
+  EncoderEvent e = encoder.getEvent();   
   
-  // 2. Get encoder event
-  EncoderEvent e = encoder.getEvent();
   if (e != EncoderEvent::NONE) 
   {
-    // screenManager.handleEncoder(e);
     if (e == EncoderEvent::PRESS)
     {
       screenManager.onEncoderPress();
@@ -50,6 +47,7 @@ void loop()
       screenManager.onEncoderTurn(e);
     }
   }
-  // 3. Update active screen
-  screenManager.update();
+
+  // 2. Update active screen
+  screenManager.update();    
 }
