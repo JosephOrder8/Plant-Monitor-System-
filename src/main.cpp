@@ -1,18 +1,53 @@
-#include <Arduino.h>
+#include <Arduino.h>  // Default Arduino library
+#include "Encoder.h"
+#include "ScreenManager.h"
+#include "SensorManager.h"
+#include "SensorScreen.h"
+#include "Menu.h"
+#include "MenuScreen.h"
+#include "Display.h"
 
-// put function declarations here:
-int myFunction(int, int);
+// Global objects
+Encoder encoder;
+ScreenManager screenManager;
+SensorManager sensorManager;
+Display display;
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+// Screens
+Menu menu;
+MenuScreen menuScreen(menu, screenManager, display);
+SensorScreen sensorScreen(sensorManager, display, screenManager);
+
+void setup() 
+{
+  Serial.begin(9600);
+  encoder.begin();
+  display.begin();
+  
+  screenManager.registerScreen(ScreenID::MENU, &menuScreen);
+  screenManager.set(ScreenID::MENU);
+
+  screenManager.registerScreen(ScreenID::LIVE_DATA, &sensorScreen);
+  
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+void loop() 
+{
+  // 1. Get encoder event
+  EncoderEvent e = encoder.getEvent();   
+  
+  if (e != EncoderEvent::NONE) 
+  {
+    if (e == EncoderEvent::PRESS)
+    {
+      screenManager.onEncoderPress();
+    }
+    else
+    {
+      screenManager.onEncoderTurn(e);
+    }
+  }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  // 2. Update active screen
+  screenManager.update();    
 }
