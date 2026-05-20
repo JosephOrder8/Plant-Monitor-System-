@@ -1,3 +1,4 @@
+// Menu.cpp - Implementation of the Menu class for managing menu items and navigation
 #include "Menu.h"
 #include "MenuScreen.h"
 
@@ -15,18 +16,20 @@ void Menu::next()    // Move to the next menu item
 {
     if (index < count - 1)    // Prevent overflow
     {
-        index++;
+        index++; // Move to next item
     }
-    Serial.println("Menu next: "+ String(index));
+    Serial.print("Menu next CW: ");
+    Serial.println(index);
 }
 
 void Menu::prev()    // Move to the previous menu item
 {
     if (index > 0)  // Prevent underflow
     {
-        index--;
+        index--; // Move to previous item
     }
-    Serial.println("Menu previous: "+ String(index));
+    Serial.print("Menu previous CCW: ");
+    Serial.println(index);
 }
 
 ScreenID Menu::selected() const

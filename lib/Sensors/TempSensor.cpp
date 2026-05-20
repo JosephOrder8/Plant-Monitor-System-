@@ -1,3 +1,4 @@
+// TempSensor.cpp - Implementation of the TempSensor class for reading temperature and humidity data from a DHT11 sensor
 #include "TempSensor.h"
 #include <pin_config.h>
 #include <DHT.h>

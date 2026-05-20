@@ -1,3 +1,4 @@
+// PlantData.h - Definition of the PlantData struct for storing sensor data related to plant monitoring
 #pragma once
 
 struct PlantData 
@@ -6,5 +7,5 @@ struct PlantData
     float soilMoisture;
     float  temperature;
     float     humidity;
-    // float waterLevel;
+    float   waterLevel;
 };

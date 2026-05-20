@@ -1,3 +1,4 @@
+// MoistureSensor.cpp - Implementation of the MoistureSensor class for reading soil moisture sensor data
 #include "MoistureSensor.h"
 #include <pin_config.h>
 
@@ -16,25 +17,36 @@ int MoistureSensor::read()
     return analogRead(ArduinoPins::SOIL_MOISTURE_PIN);
 }
 
-void MoistureSensor::status(int soilMoistureValue)
+void MoistureSensor::moistureLevel()
 {
+    int soilMoistureValue = read();
+
     if(soilMoistureValue > WaterValue && soilMoistureValue < (WaterValue + intervals))
     {
+        currentLevel = MoistureLevel::VERY_WET;
         Serial.print("Very Wet: ");
     }
     else if(soilMoistureValue>(WaterValue+intervals)&& soilMoistureValue<(AirValue-intervals))
     {
+        currentLevel = MoistureLevel::WET;
         Serial.print("Wet: ");
     }
     else if(soilMoistureValue < AirValue && soilMoistureValue >(AirValue-intervals))
     {
+        currentLevel = MoistureLevel::DRY;
         Serial.print("Dry: ");
     }
     else 
     {
+        currentLevel = MoistureLevel::ERROR;
         Serial.print("Something went wrong: ");
     }
     Serial.println(String(soilMoistureValue));
     
     delay(1000);
+}
+
+MoistureLevel MoistureSensor::getLevel() const
+{
+    return currentLevel;
 }

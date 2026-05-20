@@ -1,3 +1,4 @@
+// LightSensor.cpp - Implementation of the LightSensor class for reading light sensor data
 #include "LightSensor.h"
 #include <pin_config.h>
 

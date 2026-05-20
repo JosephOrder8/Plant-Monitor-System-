@@ -1,3 +1,4 @@
+// Screen.h - Definition of the Screen class as an abstract base class for different screens in the plant monitoring system, handling user input and screen transitions
 #pragma once
 #include "Encoder.h"
 

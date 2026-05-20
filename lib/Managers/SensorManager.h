@@ -15,11 +15,14 @@ public:
     float temperature() const; 
     float humidty() const; 
     float soilMoisture() const;
+    float TankLevel() const;
+
 private:
 
     float light;       // Light 
     float temp;        // Tempterature 
     float hum;         // Humidity 
     float moisture;    // Moisture 
+    float waterLevel;  // Water Level
 };
 #endif // SENSORMANAGER_H

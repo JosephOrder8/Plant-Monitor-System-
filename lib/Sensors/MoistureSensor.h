@@ -4,13 +4,20 @@
 #include <Arduino.h>
 #pragma once
 
+enum class MoistureLevel 
+{
+    VERY_WET, WET, DRY, ERROR
+};
+
 class MoistureSensor 
 {
 public:
     void begin(); 
     int read();
-    void status(int value); 
+    void moistureLevel();
+    MoistureLevel getLevel() const;
 private:
-int sensorPin; 
+    int sensorPin;
+    MoistureLevel currentLevel; 
 };
 #endif // MOISTURESENSOR_H

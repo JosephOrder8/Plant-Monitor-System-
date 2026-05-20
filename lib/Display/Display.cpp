@@ -1,3 +1,4 @@
+// Display.cpp - Implementation of the Display class for managing the LCD display and showing sensor data and menu options
 #include "Display.h"
 #include <LiquidCrystal_I2C.h>
 
@@ -28,15 +29,6 @@ void Display::showMenu(const char* label)
     lcd.print(label);
 }
 
-void Display::showSensors(int moisture) 
-{
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Moisture:");
-    lcd.setCursor(0, 1);
-    lcd.print(moisture);
-}
-
 void Display::drawMenuRow(uint8_t row, bool selected, const char* label) 
 {
     lcd.setCursor(0, row);
@@ -60,30 +52,34 @@ void Display::showSensorRow(int lcdRow, bool selected, int index, SensorManager&
     switch (index) 
     {
         case 0:
-            lcd.print("Soil:");
-            lcd.print(sensors.soilMoisture());
-            lcd.print(" %");
-            break;
-
-        case 1:
-            lcd.print("Temp:");
-            lcd.print(sensors.temperature());
-            lcd.print(" C");
-            break;
-
-        case 2:
-            lcd.print("Hum:");
-            lcd.print(sensors.humidty());
-            lcd.print(" %");
-            break;
-
-        case 3:
             lcd.print("Light:");
             lcd.print(sensors.lightIntensity());
             lcd.print(" lx");
             break;
 
+        case 1:
+            lcd.print("Soil:");
+            lcd.print(sensors.soilMoisture());
+            lcd.print(" %");
+            break;
+
+        case 2:
+            lcd.print("Temp:");
+            lcd.print(sensors.temperature());
+            lcd.print(" C");
+            break;
+
+        case 3:
+            lcd.print("Hum:");
+            lcd.print(sensors.humidty());
+            lcd.print(" %");
+            break;
         case 4:
+            lcd.print("Water:");
+            lcd.print(sensors.TankLevel());
+            lcd.print(" cm");
+            break;
+        case 5:
             lcd.print("Return to Menu");
             break;
     }

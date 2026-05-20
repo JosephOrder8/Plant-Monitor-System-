@@ -20,8 +20,8 @@ private:
     Display& display;                        // Reference to Display
     ScreenManager& screenManager;            // Reference to ScreenManager
 
-    void onEncoderTurn(int dir);          // Handle encoder turn events
-    static const int ROW_COUNT = 5;
+    static const int ROW_COUNT = 6;          // Total number of sensor data rows
     int cursor = 0;
     int offset = 0;
+    int VISIBLE_ROWS = 2;
 };

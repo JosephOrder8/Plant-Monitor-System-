@@ -1,3 +1,4 @@
+// MenuScreen.cpp - Implementation of the MenuScreen class for displaying a menu on a menu screen
 #include "MenuScreen.h"
 #include <Arduino.h>
 #include "ScreenManager.h"
@@ -50,10 +51,12 @@ void MenuScreen::onEncoderTurn(EncoderEvent e)
 {
     if (e == EncoderEvent::CW)  
     {
+        Serial.println("MenuScreen.cpp: CW trigger");
         menu.next();
     }
     else if (e == EncoderEvent::CCW) 
     {
+        Serial.println("MenuScreen.cpp: CCW trigger");
         menu.prev();
     }
 }

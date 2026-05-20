@@ -1,3 +1,4 @@
+// SensorScreen.cpp - Implementation of the SensorScreen class for displaying sensor data on a menu screen
 #include "SensorScreen.h"
 #include <Arduino.h>
 #include "ScreenManager.h"
@@ -15,21 +16,19 @@ void SensorScreen::enter() // Called when entering the sensor screen
 
 void SensorScreen::update() // Called periodically to update the sensor screen
 {
-    sensorManager.readSensors();
+    sensorManager.readSensors();  // Update sensor readings
 
-    for (int row = 0; row < 2; row++) 
+    for (int row = 0; row < 2; row++)  // Display 2 rows at a time
     {
         int dataIndex = offset + row;
-        if (dataIndex >= ROW_COUNT) break;
+        if (dataIndex >= ROW_COUNT) 
+        {
+            break;
+        }
 
-        bool selected = (dataIndex == cursor);
+        bool selected = (dataIndex == cursor);  // Highlight the selected row
 
-        display.showSensorRow(
-            row,
-            selected,
-            dataIndex,
-            sensorManager
-        );
+        display.showSensorRow(row,selected,dataIndex,sensorManager); // Render sensor data on the display
     }
 
 }
@@ -41,39 +40,11 @@ void SensorScreen::exit()
     display.clear();
 }
 
-void SensorScreen::onEncoderTurn(int dir) // Handle encoder turn events
-{
-    cursor += dir;
-    
-    // Clamp to min and max
-    if (cursor < 0)                       
-    {
-        cursor = 0;   // Clamp to min
-    }
-
-    if (cursor >= ROW_COUNT)              
-    {
-        cursor = ROW_COUNT - 1;  // Clamp to max
-    }
-    // Scroll window: Scroll up or down as needed
-    if (cursor < offset)            
-    {
-        offset = cursor;  //Scroll up
-    }
-
-    if (cursor >= offset + 2) 
-    {
-        offset = cursor - 1;   // Scroll down
-    }    
-    
-    Serial.println("Cursor: "+ String(cursor));
-}
-
 void SensorScreen::onEncoderPress() 
 {
     if (cursor == ROW_COUNT-1) 
     {
-        screenManager.set(ScreenID::MENU);
+        screenManager.set(ScreenID::MENU); // Go back to menu if last row (Back) is selected
     }
     else 
     {
@@ -83,13 +54,42 @@ void SensorScreen::onEncoderPress()
 
 void SensorScreen::onEncoderTurn(EncoderEvent e)
 {
+    int dir = 0;
+
     if (e == EncoderEvent::CW)  
     {
-        onEncoderTurn(1);
+        //onEncoderTurn(1); // Scroll down
+        dir = 1;
     }
     else if (e == EncoderEvent::CCW) 
     {
-        onEncoderTurn(-1);
+        //onEncoderTurn(-1); // Scroll up
+        dir = -1;
     }
+
+    int newCursor = cursor + dir;
+
+    if (newCursor < 0)
+    {
+        newCursor = 0; // Clamp to min
+    }
+    else if (newCursor >= ROW_COUNT)
+    {
+        newCursor = ROW_COUNT - 1; // Clamp to max
+    }
+
+    cursor = newCursor;
+
+    if (cursor < offset)
+    {
+        offset = cursor; // Scroll up
+    }
+    else if (cursor >= offset + VISIBLE_ROWS)
+    {
+        offset = cursor - (VISIBLE_ROWS - 1); // Scroll down
+    }
+
+    Serial.print(F("Cursor New Code: "));
+    Serial.println(cursor);
 }
 
