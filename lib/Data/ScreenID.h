@@ -4,7 +4,7 @@
 enum class ScreenID 
 {
     MENU,
-    LIVE_DATA,
+    LIVE_STATUS,
     IRRIGATION,
     POWER,
     SETTINGS

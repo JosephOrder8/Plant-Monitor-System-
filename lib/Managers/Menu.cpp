@@ -4,7 +4,7 @@
 
 const MenuItem Menu::items[] = 
 {
-    {"LiveData", ScreenID::LIVE_DATA},
+    {"LiveStatus", ScreenID::LIVE_STATUS},
     {"Irrigation", ScreenID::IRRIGATION},
     {"Power", ScreenID::POWER},
     {"Settings", ScreenID::SETTINGS}

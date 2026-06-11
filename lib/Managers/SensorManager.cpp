@@ -1,25 +1,18 @@
 // SensorManager.cpp - Implementation of the SensorManager class for managing sensor readings and storing data
+#include <Arduino.h>
+#include "SensorManager.h"
 #include "LightSensor.h"
 #include "TempSensor.h"
 #include "MoistureSensor.h"
 #include "PlantData.h"
-#include "SensorManager.h"
 #include "WaterLevelSensor.h"
 
-// Create instances of the sensor classes
+// Sensor instances
 LightSensor lightsensor;
 TempSensor tempsensor;
 MoistureSensor moisturesensor;
 WaterLevelSensor waterLevelSensor;
 PlantData plantData;
-
-// unsigned long lastUpdate = 0;
-unsigned long updateInterval = 500; // ms
-
-unsigned long tempTimer = 0;
-unsigned long lightTimer = 0;
-unsigned long moistureTimer = 0;
-unsigned long waterTimer = 0;
 
 void SensorManager::initializeSensors() 
 {
@@ -29,9 +22,24 @@ void SensorManager::initializeSensors()
     waterLevelSensor.begin();
 }
 
-void SensorManager::readSensors() 
+void SensorManager::readLiveSensors() 
 {
-    unsigned long now = millis();
+    temp = tempsensor.readtemp();                           // Tempterature
+    hum = tempsensor.readhumidity();                        // Humidity 
+    light = lightsensor.read();                             // Light
+    moisture = moisturesensor.read();                       // Moisture
+    TankStatus= waterLevelSensor.waterLevelStatus();       // Water Level
+
+    //Serial.print("Temp: ");Serial.print(temp);
+    //Serial.print(" °C, Humidity: ");Serial.print(hum);Serial.println(" %");
+    //Serial.print("Light Intensity: ");Serial.print(light);Serial.println(" lux");
+    //Serial.print("Soil Moisture: ");Serial.print(moisture);Serial.println(" %");
+    //Serial.print("Water Level: ");Serial.print(TankStatus);Serial.println(" cm");
+}
+
+void SensorManager::recordSensorData() 
+{
+      unsigned long now = millis();
 
     if (now - tempTimer > 30000)   // 30 seconds
     {
@@ -64,30 +72,15 @@ void SensorManager::readSensors()
     }
 }
 
-float SensorManager::lightIntensity() const 
-{
-    return light;
-}
+float SensorManager::lightIntensity() const  { return light; }
 
-float SensorManager::temperature() const 
-{
-    return temp;
-}
+float SensorManager::temperature() const {  return temp; }
 
-float SensorManager::humidty() const 
-{
-    return hum;
-}
+float SensorManager::humidty() const { return hum; }
 
-float SensorManager::soilMoisture() const 
-{
-    return moisture;
-}
+float SensorManager::soilMoisture() const  { return moisture; }
 
-float SensorManager::TankLevel() const 
-{
-    return waterLevel;
-}
+String SensorManager::TankLevel() const { return TankStatus; }
 
 void SensorManager::storeSensorData() 
 {

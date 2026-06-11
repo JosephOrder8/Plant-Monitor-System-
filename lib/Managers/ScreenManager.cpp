@@ -37,7 +37,7 @@ void ScreenManager::onEncoderTurn(EncoderEvent e)
 {
     if (current)
     {
-        Serial.println("ScreenManager: Encoder turn event: " + String((int)e));
+        // Serial.println("ScreenManager: Encoder turn event: " + String((int)e));
         current->onEncoderTurn(e);
     }
 }

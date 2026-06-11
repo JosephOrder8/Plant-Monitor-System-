@@ -29,7 +29,7 @@ void setup()
   screenManager.registerScreen(ScreenID::MENU, &menuScreen);
   screenManager.set(ScreenID::MENU);
 
-  screenManager.registerScreen(ScreenID::LIVE_DATA, &sensorScreen);
+  screenManager.registerScreen(ScreenID::LIVE_STATUS, &sensorScreen);
   
 }
 

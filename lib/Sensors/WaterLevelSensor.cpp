@@ -49,30 +49,47 @@ int WaterLevelSensor::waterLevel()
     Serial.print("Current Water Level: "+ String(waterLevel) + " cm\n");
 }
 
-void WaterLevelSensor::waterLevelStatus() 
+String getWaterLevelString(WaterLevel level) 
+{
+    switch (level) 
+    {
+        case WaterLevel::FULL:         return "Full";
+        case WaterLevel::MEDIUM:       return "Medium";
+        case WaterLevel::CRITICAL_LOW: return "Critical Low";
+        case WaterLevel::EMPTY:        return "Empty";
+        default:                       return "Unknown";
+    }
+}
+
+
+String WaterLevelSensor::waterLevelStatus() 
 {
     int level = waterLevel();
 
     if (level >= 10) 
     {
         currentLevel = WaterLevel::FULL;
-        Serial.println("Water Level Status: Full");
+
     } 
     else if (level >= 5) 
     {
         currentLevel = WaterLevel::MEDIUM;
-        Serial.println("Water Level Status: Medium");
     } 
     else if (level > 0) 
     {
         currentLevel = WaterLevel::CRITICAL_LOW;
-        Serial.println("Water Level Status: Critical Low");
     } 
     else 
     {
         currentLevel = WaterLevel::EMPTY;
-        Serial.println("Water Level Status: Empty");
     }
+
+     // Convert the enum to a string
+    levelString = getWaterLevelString(currentLevel);
+
+    // Print the string to the serial monitor
+    Serial.println("Water Level Status: " + levelString + " (" + String(level) + " cm)");
+    return levelString;
 }
 
 WaterLevel WaterLevelSensor::getLevel() const

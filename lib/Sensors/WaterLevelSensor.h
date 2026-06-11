@@ -15,7 +15,8 @@ public:
     void begin(); 
     int read();
     int waterLevel();
-    void waterLevelStatus();
+    String waterLevelStatus();
+    String levelString ="";
     WaterLevel getLevel() const;
 
 private:

@@ -7,6 +7,7 @@ class Display
 public:
     void begin();
     void clear();
+    void clearRow(int lcdRow);
 
     void showMenu(const char* label);
     void showSensors(int moisture);
