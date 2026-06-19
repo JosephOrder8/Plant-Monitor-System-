@@ -7,15 +7,14 @@ void WaterLevelSensor::begin()
 {
     pinMode(ArduinoPins::WATER_LEVEL_SENSOR_TRI_PIN, OUTPUT);
     pinMode(ArduinoPins::WATER_LEVEL_SENSOR_ECHO_PIN, INPUT);
+    Serial.println("Water level sensor initialized");
 }
 
-int WaterLevelSensor::read() 
+float WaterLevelSensor::read() 
 {
-    // Send a 10 microsecond pulse to trigger the sensor
-    pinMode(ArduinoPins::WATER_LEVEL_SENSOR_ECHO_PIN, OUTPUT);
+
     digitalWrite(ArduinoPins::WATER_LEVEL_SENSOR_TRI_PIN, LOW);
-    delayMicroseconds(2);
-    pinMode(ArduinoPins::WATER_LEVEL_SENSOR_ECHO_PIN, INPUT);
+    delayMicroseconds(5);
     
     digitalWrite(ArduinoPins::WATER_LEVEL_SENSOR_TRI_PIN, HIGH);
     delayMicroseconds(10);
@@ -23,30 +22,31 @@ int WaterLevelSensor::read()
     digitalWrite(ArduinoPins::WATER_LEVEL_SENSOR_TRI_PIN, LOW);
 
     // Read the echo time
-    pinMode(ArduinoPins::WATER_LEVEL_SENSOR_ECHO_PIN, INPUT);
     duration = pulseIn(ArduinoPins::WATER_LEVEL_SENSOR_ECHO_PIN, HIGH); // Timeout after 100 ms to prevent blocking
 
     // Calculate distance in centimeters
-    distance = duration * 0.0343 / 2.0;
+    distance = (duration/2.0f) / 29.1f;
 
-    // Serial.print("Current Water Level: "+ String(distance) +" cm, Duration: "+ String(duration) + "\n");
+    //Serial.print("Current Water Level: "+ String(distance) +" cm, Duration: "+ String(duration) + "\n");
 
-    return (int)distance;
+    return distance;
 }
 
-int WaterLevelSensor::waterLevel() 
+float WaterLevelSensor::waterLevel() 
 {
     float tankHeight = 14; // Total container height is 14 cm 
     float offset = 1.68;   // Offset measurement 1.68 cm
-    
-    float waterLevel = tankHeight - read() - offset; 
+    float actualTankHeight = tankHeight - offset;
+
+
+    float waterLevel = actualTankHeight - read(); 
     
     if (waterLevel < 0) 
     {
         waterLevel = 0;  // Prevent negative water level values
     }
     return waterLevel;
-    Serial.print("Current Water Level: "+ String(waterLevel) + " cm\n");
+    // Serial.print("Current Water Level: "+ String(waterLevel) + " cm\n");
 }
 
 String getWaterLevelString(WaterLevel level) 
@@ -61,21 +61,20 @@ String getWaterLevelString(WaterLevel level)
     }
 }
 
-
 String WaterLevelSensor::waterLevelStatus() 
 {
-    int level = waterLevel();
+    float level = waterLevel();
 
-    if (level >= 10) 
+    if (level >= 10.0f) 
     {
         currentLevel = WaterLevel::FULL;
 
     } 
-    else if (level >= 5) 
+    else if (level >= 5.0f) 
     {
         currentLevel = WaterLevel::MEDIUM;
     } 
-    else if (level > 0) 
+    else if (level > 0.0f) 
     {
         currentLevel = WaterLevel::CRITICAL_LOW;
     } 
@@ -88,7 +87,7 @@ String WaterLevelSensor::waterLevelStatus()
     levelString = getWaterLevelString(currentLevel);
 
     // Print the string to the serial monitor
-    Serial.println("Water Level Status: " + levelString + " (" + String(level) + " cm)");
+    // Serial.println("Water Level Status: " + levelString + " (" + String(level) + " cm)");
     return levelString;
 }
 

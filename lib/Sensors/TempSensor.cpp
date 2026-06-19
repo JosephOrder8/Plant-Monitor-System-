@@ -8,6 +8,7 @@ DHT dht11(ArduinoPins::TEMP_SENSOR_PIN, DHT11); // Initialize globalDHT11 sensor
 void TempSensor::begin() 
 {
     dht11.begin(); 
+    Serial.println("Temperature sensor initialized");
 }
 
 float TempSensor::readhumidity() 

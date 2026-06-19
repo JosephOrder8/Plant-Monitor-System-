@@ -14,7 +14,6 @@ void SensorScreen::enter() // Called when entering the sensor screen
     Serial.println("Enter SensorScreen");
 }
 
-
 void SensorScreen::update() // Called periodically to update the sensor screen
 {
     sensorManager.readLiveSensors();  // Update sensor readings
@@ -46,39 +45,6 @@ void SensorScreen::update() // Called periodically to update the sensor screen
         }
     }
 }
-
-/*
-void SensorScreen::update() // Called periodically to update the sensor screen
-{
-    sensorManager.readLiveSensors();  // Update sensor readings
-
-    for (int row = 0; row < 2; row++)  // Display 2 rows at a time
-    {
-        int dataIndex = offset + row;
-        if (dataIndex >= ROW_COUNT) 
-        {
-            break;
-        }
-
-        // bool selected = (dataIndex == cursor);  // Highlight the selected row
-
-        bool selected;
-
-        if (dataIndex == cursor)
-        {
-            selected = true;
-        }
-        else
-        {
-            selected = false;
-        }
-
-        display.showSensorRow(row,selected,dataIndex,sensorManager); // Render sensor data on the display
-    }
-
-}
-*/
-
 
 void SensorScreen::exit() 
 {
@@ -141,4 +107,3 @@ void SensorScreen::onEncoderTurn(EncoderEvent e)
     Serial.print(F("Cursor New Code: "));
     Serial.println(cursor);
 }
-

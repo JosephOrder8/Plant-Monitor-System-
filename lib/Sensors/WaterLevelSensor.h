@@ -13,8 +13,8 @@ class WaterLevelSensor
 {
 public:
     void begin(); 
-    int read();
-    int waterLevel();
+    float read();
+    float waterLevel();
     String waterLevelStatus();
     String levelString ="";
     WaterLevel getLevel() const;

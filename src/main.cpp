@@ -1,3 +1,4 @@
+
 // main.cpp - Main entry point for the Plant Monitoring System, initializing components and managing the main loop for handling user input and updating the display
 #include <Arduino.h>  // Default Arduino library
 #include "Encoder.h"
@@ -23,6 +24,8 @@ SensorScreen sensorScreen(sensorManager, display, screenManager);
 void setup() 
 {
   Serial.begin(9600);
+  
+  sensorManager.initializeSensors();
   encoder.begin(); 
   display.begin();
   
@@ -35,9 +38,11 @@ void setup()
 
 // Main loop: Handle encoder input and update the current screen
 void loop() 
-{  
+{ 
+  // encoder.update();
   EncoderEvent e = encoder.getEvent();  // Get the current encoder event
      
+
   if (e != EncoderEvent::NONE)  // If there is an encoder event, handle it
   {
     if (e == EncoderEvent::PRESS) // If the event is a button press, call the appropriate handler
@@ -51,4 +56,5 @@ void loop()
   }
 
   screenManager.update(); // Update the current screen
+
 }

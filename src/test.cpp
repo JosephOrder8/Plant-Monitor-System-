@@ -1,8 +1,9 @@
-/* 
- * Test code for water level sensor
- * This code is used to test the functionality of the water level sensor and ensure it is working correctly.
- * It will read the water level every 30 seconds and print the value to the serial monitor.
- * Make sure to connect the sensor correctly to the specified pins in pin_config.h.
+/*
+ // Test code for water level sensor
+ // This code is used to test the functionality of the water level sensor and ensure it is working correctly.
+ // It will read the water level every 30 seconds and print the value to the serial monitor.
+ // Make sure to connect the sensor correctly to the specified pins in pin_config.h.
+ 
 #include <Arduino.h>
 #include <pin_config.h>
 
@@ -22,14 +23,18 @@ void setup()
 
 void loop()
 {
-    unsigned long now = millis();
+    //unsigned long now = millis();
     
-    if (now - waterTimer > 30000)   // 1 minutes
-    {
-        waterLevel = readWaterLevelSensor();       // Water Level
-        Serial.print("Water Level: ");Serial.print(waterLevel);Serial.println(" cm");
-        waterTimer = now;
-    }
+    //if (now - waterTimer > 30000)   // 1 minutes
+    //{
+    //    waterLevel = readWaterLevelSensor();       // Water Level
+    //    Serial.print("Water Level: ");Serial.print(waterLevel);Serial.println(" cm");
+    //    waterTimer = now;
+    //}
+
+    waterLevel = readWaterLevelSensor();       // Water Level
+    Serial.print("Water Level: ");Serial.print(waterLevel);Serial.println(" cm");
+    delay(500);
 }
 
 float readWaterLevelSensor() 
@@ -37,7 +42,7 @@ float readWaterLevelSensor()
     // Send a 10 microsecond pulse to trigger the sensor
     pinMode(ArduinoPins::WATER_LEVEL_SENSOR_ECHO_PIN, OUTPUT);
     digitalWrite(ArduinoPins::WATER_LEVEL_SENSOR_TRI_PIN, LOW);
-    delayMicroseconds(2);
+    delayMicroseconds(5);
     pinMode(ArduinoPins::WATER_LEVEL_SENSOR_ECHO_PIN, INPUT);
     
     digitalWrite(ArduinoPins::WATER_LEVEL_SENSOR_TRI_PIN, HIGH);
@@ -56,8 +61,8 @@ float readWaterLevelSensor()
 }
 
 #endif
-
 */
+
 
 /*
 #include <Arduino.h>

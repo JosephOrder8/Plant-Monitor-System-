@@ -29,5 +29,4 @@ namespace ArduinoPins
     constexpr int MISO_PIN       = 11;
     constexpr int SCK_PIN        = 12;
 
-    
 }

@@ -11,7 +11,7 @@
 LightSensor lightsensor;
 TempSensor tempsensor;
 MoistureSensor moisturesensor;
-WaterLevelSensor waterLevelSensor;
+WaterLevelSensor waterLvlSensor;
 PlantData plantData;
 
 void SensorManager::initializeSensors() 
@@ -19,7 +19,7 @@ void SensorManager::initializeSensors()
     lightsensor.begin();
     tempsensor.begin();
     moisturesensor.begin();
-    waterLevelSensor.begin();
+    waterLvlSensor.begin();
 }
 
 void SensorManager::readLiveSensors() 
@@ -28,8 +28,8 @@ void SensorManager::readLiveSensors()
     hum = tempsensor.readhumidity();                        // Humidity 
     light = lightsensor.read();                             // Light
     moisture = moisturesensor.read();                       // Moisture
-    TankStatus= waterLevelSensor.waterLevelStatus();       // Water Level
-
+    TankStatus= waterLvlSensor.waterLevelStatus();        // Water Level
+    // delay(500);
     //Serial.print("Temp: ");Serial.print(temp);
     //Serial.print(" °C, Humidity: ");Serial.print(hum);Serial.println(" %");
     //Serial.print("Light Intensity: ");Serial.print(light);Serial.println(" lux");
@@ -66,7 +66,7 @@ void SensorManager::recordSensorData()
 
     if (now - waterTimer > 69000)   // 1 minutes
     {
-        waterLevel = waterLevelSensor.read();       // Water Level
+        waterLevel = waterLvlSensor.read();       // Water Level
         Serial.print("Water Level: ");Serial.print(waterLevel);Serial.println(" cm");
         waterTimer = now;
     }

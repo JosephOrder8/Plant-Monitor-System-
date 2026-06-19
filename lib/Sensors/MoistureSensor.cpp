@@ -10,6 +10,7 @@ int intervals =(AirValue-WaterValue)/3;
 void MoistureSensor::begin() 
 {
     pinMode(ArduinoPins::SOIL_MOISTURE_PIN, INPUT);
+    Serial.println("Moisture sensor initialized");
 }
 
 int MoistureSensor::read() 

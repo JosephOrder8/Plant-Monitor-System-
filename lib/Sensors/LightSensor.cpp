@@ -5,6 +5,7 @@
 void LightSensor::begin() 
 {
     pinMode(ArduinoPins::LIGHT_SENSOR_PIN, INPUT);
+    Serial.println("Light sensor initialized");
 }
 
 int LightSensor::read() 
